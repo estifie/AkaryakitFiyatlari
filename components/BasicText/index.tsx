@@ -15,6 +15,7 @@ interface BasicTextProps {
 	p?: boolean;
 	s20?: boolean;
 	s18?: boolean;
+	s16?: boolean;
 	bold?: boolean;
 	italic?: boolean;
 	style?: any;
@@ -33,6 +34,7 @@ const BasicText = ({
 	p,
 	s20,
 	s18,
+	s16,
 	bold,
 	italic,
 	style,
@@ -51,6 +53,7 @@ const BasicText = ({
 				h8 && { fontSize: responsiveFontSize(10) },
 				s20 && { fontSize: responsiveFontSize(20) },
 				s18 && { fontSize: responsiveFontSize(18) },
+				s16 && { fontSize: responsiveFontSize(16) },
 				p && { fontSize: responsiveFontSize(14) },
 				bold && { fontWeight: "bold" },
 				italic && { fontStyle: "italic" },

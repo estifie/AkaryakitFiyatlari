@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from "react";
-import { useColorScheme } from "react-native";
+import { Appearance, useColorScheme } from "react-native";
 
 const lightTheme = {
 	primaryColor: "#FC6843",
@@ -19,9 +19,9 @@ const darkTheme = {
 	tertiaryColor: "#F2F2F2",
 	white: "#F1f2f1",
 	black: "#1E1E1E",
-	grey: "#151515",
-	grey2: "#575757",
-	grey3: "#B2B1B3",
+	grey: "#848484",
+	grey2: "#B8B8B8",
+	grey3: "#151515",
 	grey4: "#DCDDDE",
 };
 

@@ -7,11 +7,11 @@ import { ThemeProvider } from "../context/ThemeContext";
 export default function Root() {
 	return (
 		<GestureHandlerRootView style={{ flex: 1 }}>
-			<FuelProvider>
-				<ThemeProvider>
+			<ThemeProvider>
+				<FuelProvider>
 					<Slot />
-				</ThemeProvider>
-			</FuelProvider>
+				</FuelProvider>
+			</ThemeProvider>
 		</GestureHandlerRootView>
 	);
 }
