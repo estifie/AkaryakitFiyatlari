@@ -7,10 +7,11 @@ const lightTheme = {
 	tertiaryColor: "#1E1E1E",
 	white: "#F1f2f1",
 	black: "#1E1E1E",
-	grey: "#E4E4E4",
-	grey2: "#575757",
-	grey3: "#B2B1B3",
-	grey4: "#DCDDDE",
+	grey: "#848484",
+	grey2: "#B8B8B8",
+	grey3: "#151515",
+	grey4: "#cdcdcd",
+	grey5: "#f2f2f2",
 };
 
 const darkTheme = {
@@ -21,8 +22,9 @@ const darkTheme = {
 	black: "#1E1E1E",
 	grey: "#848484",
 	grey2: "#B8B8B8",
-	grey3: "#151515",
-	grey4: "#DCDDDE",
+	grey3: "#bbbbbb",
+	grey4: "#2e2e2e",
+	grey5: "#191919",
 };
 
 const ThemeContext = createContext();

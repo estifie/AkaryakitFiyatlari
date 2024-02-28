@@ -4,6 +4,11 @@ import { responsiveFontSize } from "../../utils/utils";
 
 const styles = (theme) =>
 	StyleSheet.create({
+		pageContainer: {
+			backgroundColor: theme.secondaryColor,
+			flex: 1,
+			height: "100%",
+		},
 		container: {
 			flex: 1,
 			backgroundColor: theme.secondaryColor,
@@ -18,24 +23,22 @@ const styles = (theme) =>
 			paddingVertical: hp("1%"),
 			width: "100%",
 			flexDirection: "row",
-			paddingStart: wp("5%"),
-			paddingEnd: wp("5%"),
+			paddingStart: wp("6%"),
+			paddingEnd: wp("6%"),
 		},
 		twoLinedCityDistrictContainer: {
 			paddingVertical: hp("1%"),
 			width: "100%",
-			paddingStart: wp("5%"),
-			paddingEnd: wp("5%"),
+			paddingStart: wp("6%"),
+			paddingEnd: wp("6%"),
 			flexDirection: "column",
 		},
 		cityText: {
-			textTransform: "uppercase",
 			letterSpacing: wp("1%"),
 			fontSize: responsiveFontSize(32),
 			color: theme.tertiaryColor,
 		},
 		districtText: {
-			textTransform: "uppercase",
 			letterSpacing: wp("0.5%"),
 			fontSize: responsiveFontSize(24),
 			color: theme.grey,
@@ -52,14 +55,14 @@ const styles = (theme) =>
 		fuelTypeContainer: {
 			flexDirection: "row",
 			alignItems: "center",
-			marginRight: wp("4%"),
+			paddingHorizontal: wp("2.5%"),
 		},
 		firstFuelType: {
 			marginLeft: wp("1%"),
 		},
 		fuelTypeDisplayContainer: {
-			paddingStart: wp("5%"),
-			paddingEnd: wp("5%"),
+			paddingStart: wp("6%"),
+			paddingEnd: wp("6%"),
 			marginTop: hp("3%"),
 			width: "100%",
 		},
@@ -73,11 +76,30 @@ const styles = (theme) =>
 			color: theme.grey,
 		},
 		bottomSheetContainer: {
-			backgroundColor: theme.grey3,
+			backgroundColor: theme.secondaryColor,
 			flex: 1,
 		},
 		bottomSheetHandleIndicator: {
 			backgroundColor: theme.tertiaryColor,
+		},
+		bottomSheetTitleContainer: {
+			width: "100%",
+			alignItems: "center",
+			paddingVertical: hp("1%"),
+		},
+		bottomSheetTitleText: {
+			color: theme.grey3,
+		},
+		bottomSheetListItemContainer: {
+			paddingHorizontal: wp("6%"),
+			paddingVertical: hp("2%"),
+		},
+		bottomSheetListItemSeperator: {
+			height: wp("0.2%"),
+			backgroundColor: theme.grey4,
+		},
+		bottomSheetListItemText: {
+			color: theme.grey3,
 		},
 	});
 
