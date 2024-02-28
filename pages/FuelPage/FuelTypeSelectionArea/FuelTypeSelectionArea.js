@@ -1,8 +1,8 @@
 import { FontAwesome } from "@expo/vector-icons";
-import { Platform, ScrollView, View } from "react-native";
+import { View } from "react-native";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
-import { BasicCustomButton } from "../../components/BasicButton";
-import BasicText from "../../components/BasicText";
+import { BasicCustomButton } from "../../../components/BasicButton";
+import BasicText from "../../../components/BasicText";
 import styles from "./styles";
 
 const fuelTypes = [
@@ -28,14 +28,8 @@ const FuelTypeSelectionArea = ({ theme, selectedFuelType, setSelectedFuelType })
 	const themedStyles = styles(theme);
 
 	return (
-		<View
-			style={{
-				width: "100%",
-				marginTop: wp("5%"),
-				alignItems: "center",
-			}}
-		>
-			<View style={themedStyles.fuelTypeContainer}>
+		<View style={themedStyles.container}>
+			<View style={themedStyles.innerContainer}>
 				{fuelTypes.map((fuelType, index) => {
 					return (
 						<BasicCustomButton
@@ -44,7 +38,7 @@ const FuelTypeSelectionArea = ({ theme, selectedFuelType, setSelectedFuelType })
 							key={index}
 							activeOpacity={0.5}
 						>
-							<View style={[themedStyles.fuelTypeContainer, index === 0 && themedStyles.firstFuelType]}>
+							<View style={[themedStyles.innerContainer, index === 0 && themedStyles.firstFuelType]}>
 								<SelectedDot selectedFuelType={selectedFuelType} fuelTypeName={fuelType.id} theme={theme} />
 								<BasicText s20 bold={selectedFuelType == fuelType.id ? true : false} style={themedStyles.fuelTypeText}>
 									{fuelType.display}

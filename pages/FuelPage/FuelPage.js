@@ -4,14 +4,13 @@ import { Text, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
-import BasicText from "../../components/BasicText";
 import CITY_IDS from "../../constants/cities";
 import { useFuel } from "../../context/FuelContext";
 import { useTheme } from "../../context/ThemeContext";
 import BottomSheet from "./BottomSheet/BottomSheet";
-import CityDistrictArea from "./CityDistrictArea";
-import FuelTypeDisplayArea from "./FuelTypeDisplayArea";
-import FuelTypeSelectionArea from "./FuelTypeSelectionArea";
+import CityDistrictArea from "./CityDistrictArea/CityDistrictArea";
+import FuelTypeDisplayArea from "./FuelTypeDisplayArea/FuelTypeDisplayArea";
+import FuelTypeSelectionArea from "./FuelTypeSelectionArea/FuelTypeSelectionArea";
 import styles from "./styles";
 
 const FuelPage = () => {

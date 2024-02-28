@@ -1,22 +1,16 @@
 import { MaterialIcons } from "@expo/vector-icons";
 import React from "react";
 import { Text, View } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
-import { BasicCustomButton } from "../../components/BasicButton";
-import BasicText from "../../components/BasicText";
+import { BasicCustomButton } from "../../../components/BasicButton";
+import BasicText from "../../../components/BasicText";
 import styles from "./styles";
 
 const CityDistrictArea = ({ theme, cityData, handleBottomSheetToggle }) => {
 	const themedStyles = styles(theme);
 
 	return (
-		<View
-			style={{
-				width: "100%",
-				marginTop: hp("1%"),
-			}}
-		>
+		<View style={themedStyles.container}>
 			<BasicCustomButton
 				onPress={() => {
 					handleBottomSheetToggle();
@@ -28,11 +22,11 @@ const CityDistrictArea = ({ theme, cityData, handleBottomSheetToggle }) => {
 						? cityData.cityDisplayName.length * 1.3 + cityData.districtName.length > 20
 						: cityData.cityDisplayName.length * 1.3 > 20
 				) ? (
-					<View style={themedStyles.twoLinedCityDistrictContainer}>
+					<View style={themedStyles.longContainer}>
 						<BasicText h1 style={themedStyles.cityText}>
 							{cityData.cityDisplayName}
 						</BasicText>
-						<View style={themedStyles.twoLinedDistrictContainer}>
+						<View style={{ flexDirection: "row" }}>
 							{cityData.cityDisplayName === cityData.districtName ? null : (
 								<BasicText h3 style={themedStyles.districtText}>
 									{cityData.districtName}
@@ -44,7 +38,7 @@ const CityDistrictArea = ({ theme, cityData, handleBottomSheetToggle }) => {
 						</View>
 					</View>
 				) : (
-					<View style={themedStyles.cityDistrictContainer}>
+					<View style={themedStyles.shortContainer}>
 						<BasicText h1 style={themedStyles.cityText}>
 							{cityData.cityDisplayName}
 							<Text style={themedStyles.cityDistrictSpacing}> </Text>
