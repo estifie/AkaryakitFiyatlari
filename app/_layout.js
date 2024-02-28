@@ -1,3 +1,4 @@
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { Slot } from "expo-router";
 import React from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -9,7 +10,9 @@ export default function Root() {
 		<GestureHandlerRootView style={{ flex: 1 }}>
 			<ThemeProvider>
 				<FuelProvider>
-					<Slot />
+					<BottomSheetModalProvider>
+						<Slot />
+					</BottomSheetModalProvider>
 				</FuelProvider>
 			</ThemeProvider>
 		</GestureHandlerRootView>
