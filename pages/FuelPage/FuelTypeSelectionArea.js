@@ -15,7 +15,7 @@ const fuelTypes = [
 		display: "Benzin",
 	},
 	{
-		id: "motorine",
+		id: "diesel",
 		display: "Mazot",
 	},
 	{
@@ -32,7 +32,6 @@ const FuelTypeSelectionArea = ({ theme, selectedFuelType, setSelectedFuelType })
 			style={{
 				width: "100%",
 				marginTop: wp("5%"),
-				paddingStart: wp("5%"),
 				alignItems: "center",
 			}}
 		>
