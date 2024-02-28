@@ -41,35 +41,31 @@ interface AnimatedBasicImageProps {
 }
 
 const AnimatedBasicImage = ({ source, style, borderRadius, resizeMode, onPress }: AnimatedBasicImageProps) => {
-	const [scaleAnimation] = useState(new Animated.Value(1)); // Initial scale value is 1
+	const [scaleAnimation] = useState(new Animated.Value(1));
 
 	const handlePressIn = () => {
-		// Shrink animation
 		Animated.timing(scaleAnimation, {
-			toValue: 0.95, // Scale down to 95%
+			toValue: 0.95,
 			duration: 80,
 			useNativeDriver: false,
 		}).start();
 	};
 
 	const handlePressOut = () => {
-		// Grow back animation
 		Animated.timing(scaleAnimation, {
-			toValue: 1, // Scale back to 100%
+			toValue: 1,
 			duration: 80,
 			useNativeDriver: false,
 		}).start();
 
-		// Call the onPress function if it exists
 		if (onPress) {
 			onPress();
 		}
 	};
 
 	useEffect(() => {
-		// Clean up the animation when the component unmounts or when the state changes
 		return () => {
-			scaleAnimation.setValue(1); // Reset the scale to 1
+			scaleAnimation.setValue(1);
 		};
 	}, [scaleAnimation]);
 
@@ -109,30 +105,27 @@ const AnimatedBasicImageBackground = ({
 	children,
 	imageStyle,
 }: AnimatedBasicImageBackgroundProps) => {
-	const [scaleAnimation] = useState(new Animated.Value(1)); // Initial scale value is 1
+	const [scaleAnimation] = useState(new Animated.Value(1));
 
 	const handlePressIn = () => {
-		// Shrink animation
 		Animated.timing(scaleAnimation, {
-			toValue: 0.95, // Scale down to 95%
+			toValue: 0.95,
 			duration: 80,
 			useNativeDriver: false,
 		}).start();
 	};
 
 	const handlePressOut = () => {
-		// Grow back animation
 		Animated.timing(scaleAnimation, {
-			toValue: 1, // Scale back to 100%
+			toValue: 1,
 			duration: 80,
 			useNativeDriver: false,
 		}).start(() => {});
 	};
 
 	useEffect(() => {
-		// Clean up the animation when the component unmounts or when the state changes
 		return () => {
-			scaleAnimation.setValue(1); // Reset the scale to 1
+			scaleAnimation.setValue(1);
 		};
 	}, [scaleAnimation]);
 
@@ -171,3 +164,4 @@ const AnimatedBasicImageBackground = ({
 };
 
 export { AnimatedBasicImage, AnimatedBasicImageBackground, BasicImage };
+

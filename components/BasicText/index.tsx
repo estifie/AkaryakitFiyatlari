@@ -17,6 +17,7 @@ interface BasicTextProps {
 	s18?: boolean;
 	s16?: boolean;
 	bold?: boolean;
+	semibold?: boolean;
 	italic?: boolean;
 	style?: any;
 }
@@ -36,6 +37,7 @@ const BasicText = ({
 	s18,
 	s16,
 	bold,
+	semibold,
 	italic,
 	style,
 	...props
@@ -56,6 +58,7 @@ const BasicText = ({
 				s16 && { fontSize: responsiveFontSize(16) },
 				p && { fontSize: responsiveFontSize(14) },
 				bold && { fontWeight: "bold" },
+				semibold && { fontWeight: "600" },
 				italic && { fontStyle: "italic" },
 				style,
 			]}
