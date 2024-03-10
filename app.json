@@ -3,6 +3,7 @@
 		"name": "AkaryakitFiyatlari",
 		"slug": "AkaryakitFiyatlari",
 		"version": "1.0.0",
+		"scheme": "akaryakitfiyatlari",
 		"orientation": "portrait",
 		"icon": "./assets/icon.png",
 		"userInterfaceStyle": "auto",
