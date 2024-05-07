@@ -6,7 +6,7 @@ import BasicText from "../../../components/BasicText";
 import CITY_IDS from "../../../constants/cities";
 import styles from "./styles";
 
-const BottomSheet = ({ bottomSheetRef, theme, cityData, setCityData, isSelectingCity, data }) => {
+const BottomSheet = ({ bottomSheetRef, theme, cityData, setCityData, isSelectingCity, data, setSelectedFuelType }) => {
 	const themedStyles = styles(theme);
 
 	return (
@@ -44,6 +44,7 @@ const BottomSheet = ({ bottomSheetRef, theme, cityData, setCityData, isSelecting
 						cityData={cityData}
 						setCityData={setCityData}
 						isSelectingCity={isSelectingCity}
+						setSelectedFuelType={setSelectedFuelType}
 					/>
 				)}
 			/>
@@ -60,6 +61,7 @@ const ListItem = ({
 	cityData,
 	setCityData,
 	isSelectingCity,
+	setSelectedFuelType,
 }) => {
 	return (
 		<View>
@@ -76,6 +78,7 @@ const ListItem = ({
 						});
 					} else {
 						setCityData({ ...cityData, districtName: displayName.toLocaleUpperCase("tr-TR") });
+						setSelectedFuelType("all");
 					}
 				}}
 			>

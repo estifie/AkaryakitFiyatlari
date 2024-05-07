@@ -1,10 +1,9 @@
-import { MaterialIcons } from "@expo/vector-icons";
-import React, { createRef, useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Text, View } from "react-native";
+import React, { useEffect, useRef, useState } from "react";
+import { View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
-import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
+import { SafeAreaView } from "react-native-safe-area-context";
 import CITY_IDS from "../../constants/cities";
+import DISTRICTS from "../../constants/districts";
 import { useFuel } from "../../context/FuelContext";
 import { useTheme } from "../../context/ThemeContext";
 import BottomSheet from "./BottomSheet/BottomSheet";
@@ -16,13 +15,13 @@ import styles from "./styles";
 const FuelPage = () => {
 	const { theme } = useTheme();
 	const themedStyles = styles(theme);
-	const { getFuelOfCity, getDistrictsOfCity, getStations } = useFuel();
+	const { getFuelOfCity, getStations } = useFuel();
 	const [cityData, setCityData] = useState({
-		cityId: -1, // Initial value is -1, it will be recognized as Istanbul in backend
+		// Initial value is -1, it will be recognized as Istanbul in backend
+		cityId: -1,
 		cityDisplayName: "İSTANBUL",
 		districtName: "",
 		districtsOfCity: [],
-		fuelData: [],
 	});
 	const [stations, setStations] = useState([]);
 	const [selectedFuelType, setSelectedFuelType] = useState("all");
@@ -41,40 +40,34 @@ const FuelPage = () => {
 	}, []);
 
 	useEffect(() => {
-		getDistrictsOfCity(cityData.cityId).then((districts) => {
-			getFuelOfCity(cityData.cityId).then((fuel) => {
-				setCityData({ ...cityData, fuelData: fuel, districtsOfCity: districts });
-			});
+		setCityData({ ...cityData, districtsOfCity: DISTRICTS[cityData.cityId] });
+		getFuelOfCity(cityData.cityId);
 
-			// If cityId is initial value, do not show the ilçe bottom sheet
-			if (cityData.cityId === -1) return;
+		if (cityData.cityId === -1) return;
 
-			districtBottomSheetRef.current?.present();
-		});
+		districtBottomSheetRef.current?.present();
 	}, [cityData.cityId]);
 
 	return (
 		<View style={themedStyles.pageContainer}>
-			<ScrollView showsVerticalScrollIndicator={false}>
-				<SafeAreaView style={themedStyles.container}>
-					<View style={themedStyles.screenTopContainer}>
-						<CityDistrictArea theme={theme} cityData={cityData} handleBottomSheetToggle={handlePresentModalPress} />
-						<FuelTypeSelectionArea
-							theme={theme}
-							selectedFuelType={selectedFuelType}
-							setSelectedFuelType={setSelectedFuelType}
-						/>
-						<FuelTypeDisplayArea
-							theme={theme}
-							fuelData={cityData.fuelData}
-							selectedFuelType={selectedFuelType}
-							selectedDistrict={cityData.districtName}
-							selectedCity={cityData.cityDisplayName}
-							stations={stations}
-						/>
-					</View>
-				</SafeAreaView>
-			</ScrollView>
+			<SafeAreaView style={themedStyles.container}>
+				<View style={themedStyles.screenTopContainer}>
+					<CityDistrictArea theme={theme} cityData={cityData} handleBottomSheetToggle={handlePresentModalPress} />
+					<FuelTypeSelectionArea
+						theme={theme}
+						selectedFuelType={selectedFuelType}
+						setSelectedFuelType={setSelectedFuelType}
+					/>
+					<FuelTypeDisplayArea
+						selectedFuelType={selectedFuelType}
+						setSelectedFuelType={setSelectedFuelType}
+						selectedDistrict={cityData.districtName}
+						cityData={cityData}
+						selectedCity={cityData.cityDisplayName}
+						stations={stations}
+					/>
+				</View>
+			</SafeAreaView>
 			<BottomSheet
 				bottomSheetRef={cityBottomSheetRef}
 				theme={theme}
@@ -82,6 +75,7 @@ const FuelPage = () => {
 				cityData={cityData}
 				setCityData={setCityData}
 				isSelectingCity={true}
+				setSelectedFuelType={setSelectedFuelType}
 			/>
 			<BottomSheet
 				bottomSheetRef={districtBottomSheetRef}
@@ -90,6 +84,7 @@ const FuelPage = () => {
 				setCityData={setCityData}
 				isSelectingCity={false}
 				data={cityData.districtsOfCity}
+				setSelectedFuelType={setSelectedFuelType}
 			/>
 		</View>
 	);

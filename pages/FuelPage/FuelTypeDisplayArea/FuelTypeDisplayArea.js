@@ -1,7 +1,9 @@
-import { Image, View } from "react-native";
+import React, { useState } from "react";
+import { FlatList, Image, ScrollView, View } from "react-native";
 import { BasicCustomButton } from "../../../components/BasicButton";
 import BasicText from "../../../components/BasicText";
 import { PUBLIC_URL } from "../../../constants/apiConfig";
+import { useFuel } from "../../../context/FuelContext";
 import { useTheme } from "../../../context/ThemeContext";
 import styles from "./styles";
 
@@ -20,55 +22,59 @@ const fuelTypes = [
 	},
 ];
 
-const FuelTypeDisplayArea = ({
-	fuelData,
-	selectedDistrict,
-	stations,
-	cityData,
-	selectedFuelType,
-	setSelectedFuelType,
-}) => {
+/* Root Component For Displaying Fuel Data */
+const FuelTypeDisplayArea = ({ selectedDistrict, stations, cityData, selectedFuelType, setSelectedFuelType }) => {
 	const selectedCity = cityData.cityDisplayName;
 	if (selectedDistrict === "") {
 		selectedDistrict = selectedCity;
 	}
 
-	const filteredFuelData = fuelData.filter((fuel) =>
-		selectedCity.toLocaleUpperCase("tr-TR") === selectedDistrict.toLocaleUpperCase("tr-TR")
-			? true
-			: fuel.districtName === selectedDistrict.toLocaleUpperCase("tr-TR"),
-	);
-
 	return (
+		/* It displays a container for each fuel type */
 		<View>
-			{fuelTypes.map((fuelType, index) => {
-				return (
+			{selectedFuelType === "all" ? (
+				<View>
+					<ScrollView showsVerticalScrollIndicator={false}>
+						{fuelTypes.map((fuelType, index) => {
+							return (
+								<FuelTypeContainer
+									key={index}
+									fuelType={fuelType}
+									selectedDistrict={selectedDistrict}
+									selectedCity={selectedCity}
+									stations={stations}
+									selectedFuelType={selectedFuelType}
+									setSelectedFuelType={setSelectedFuelType}
+								/>
+							);
+						})}
+					</ScrollView>
+				</View>
+			) : (
+				<View>
 					<FuelTypeContainer
-						key={index}
-						fuelType={fuelType}
-						filteredFuelData={filteredFuelData}
+						fuelType={fuelTypes.find((fuelType) => fuelType.id === selectedFuelType)}
 						selectedDistrict={selectedDistrict}
 						selectedCity={selectedCity}
 						stations={stations}
 						selectedFuelType={selectedFuelType}
 						setSelectedFuelType={setSelectedFuelType}
 					/>
-				);
-			})}
+				</View>
+			)}
 		</View>
 	);
 };
 
 const FuelTypeContainer = ({
 	fuelType,
-	filteredFuelData,
 	selectedDistrict,
 	selectedCity,
 	stations,
 	selectedFuelType,
 	setSelectedFuelType,
-	index,
 }) => {
+	const { fuelData } = useFuel();
 	const { theme } = useTheme();
 	const themedStyles = styles(theme);
 
@@ -76,24 +82,24 @@ const FuelTypeContainer = ({
 		return null;
 	}
 
-	const {
-		minimum: minimumPrice,
-		maximum: maximumPrice,
-		minimumStation: minimumStation,
-		maximumStation: maximumStation,
-	} = findMinMaxPrice(filteredFuelData, fuelType.id + "Price");
+	if (fuelData == [] || fuelData[fuelType.id] === undefined) {
+		return null;
+	}
 
-	const minimumStationName =
-		stations && minimumStation
-			? stations.find((station) => station.id === minimumStation.stationId).displayName
-			: "İstasyon";
-	const maximumStationName =
-		stations && maximumStation
-			? stations.find((station) => station.id === maximumStation.stationId).displayName
-			: "İstasyon";
+	const filteredFuelData = filterFuelData(fuelData, fuelType, selectedDistrict, selectedCity);
+
+	const minimumStation = {
+		price: filteredFuelData[0]?.price,
+		stationName: getStationName(stations, filteredFuelData[0]),
+	};
+
+	const maximumStation = {
+		price: filteredFuelData[filteredFuelData.length - 1]?.price,
+		stationName: getStationName(stations, filteredFuelData[filteredFuelData.length - 1]),
+	};
 
 	return (
-		<View style={themedStyles.container} key={index}>
+		<View style={themedStyles.container} key={fuelType.id}>
 			{/* Fuel Type Title */}
 			<FuelTypeTitle
 				isSelected={selectedFuelType === fuelType.id}
@@ -106,26 +112,25 @@ const FuelTypeContainer = ({
 			{/* Price Description */}
 			<FuelTypeDescription
 				fuelTypeDisplayName={fuelType.display}
-				minimumPrice={minimumPrice}
-				maximumPrice={maximumPrice}
-				maximumStationName={maximumStationName}
-				minimumStationName={minimumStationName}
+				minimumPrice={minimumStation.price}
+				maximumPrice={maximumStation.price}
+				maximumStationName={maximumStation.stationName}
+				minimumStationName={minimumStation.stationName}
 			/>
 
 			{/* Stations */}
 			<View>
 				{selectedFuelType === "all" ? (
 					<FuelTypeStations
-						minimumPrice={minimumPrice}
-						maximumPrice={maximumPrice}
-						minimumStationName={minimumStationName}
-						maximumStationName={maximumStationName}
+						minimumPrice={minimumStation.price}
+						maximumPrice={maximumStation.price}
+						minimumStationName={minimumStation.stationName}
+						maximumStationName={maximumStation.stationName}
 					/>
 				) : (
 					<FuelTypeSelectedStations
 						stations={stations}
 						fuelType={fuelType}
-						filteredFuelData={filteredFuelData}
 						selectedDistrict={selectedDistrict}
 						selectedCity={selectedCity}
 					/>
@@ -236,56 +241,81 @@ const FuelTypeStations = ({ minimumPrice, maximumPrice, minimumStationName, maxi
 	);
 };
 
-const FuelTypeSelectedStations = ({ stations, fuelType, filteredFuelData, selectedDistrict, selectedCity }) => {
+const FuelTypeSelectedStations = ({ stations, selectedDistrict, selectedCity, fuelType }) => {
+	const { fuelData } = useFuel();
 	const { theme } = useTheme();
-	const themedStyles = styles(theme);
+	const [renderCount, setRenderCount] = useState(20);
+
+	const onEndReached = () => {
+		setRenderCount((prevCount) => prevCount + 20);
+	};
+
+	const filteredFuelData = filterFuelData(fuelData, fuelType, selectedDistrict, selectedCity);
 
 	return (
 		<View>
-			{filteredFuelData.map((fuel, index) => {
-				if (fuel[fuelType.id + "Price"] === 0) {
-					return null;
-				}
-
-				const station = stations.find((station) => station.id === fuel.stationId);
-
-				return (
-					<View style={themedStyles.stationsContainer} key={index}>
-						<View style={themedStyles.stationsBackground}>
-							<View style={{ flex: 1 }}>
-								<Image
-									source={{ uri: PUBLIC_URL + station.displayName.toLocaleLowerCase("tr-TR") + ".png" }}
-									style={themedStyles.stationsImage}
-								/>
-							</View>
-							<View style={themedStyles.stationsTextContainer}>
-								{selectedDistrict.toLocaleUpperCase("tr-TR") === selectedCity.toLocaleUpperCase("tr-TR") && (
-									<BasicText bold style={themedStyles.descriptionTitle}>
-										{fuel.districtName}
-									</BasicText>
-								)}
-								<BasicText bold style={themedStyles.stationsText}>
-									{station.displayName}
-								</BasicText>
-								<BasicText style={themedStyles.stationsText}>{fuel[fuelType.id + "Price"].toFixed(3)} ₺</BasicText>
-							</View>
-						</View>
-					</View>
-				);
-			})}
+			<FlatList
+				showsVerticalScrollIndicator={false}
+				data={filteredFuelData.slice(0, renderCount)}
+				renderItem={({ item: fuel }) => {
+					const station = stations.find((station) => station.id === fuel.stationId);
+					return (
+						<FuelTypeSelectedStationItem
+							station={station}
+							selectedDistrict={selectedDistrict}
+							selectedCity={selectedCity}
+							fuel={fuel}
+						/>
+					);
+				}}
+				onEndReached={onEndReached}
+				keyExtractor={(item, index) => index.toString()}
+			/>
 		</View>
 	);
 };
 
-const findMinMaxPrice = (fuelData, fuelType) => {
-	const prices = fuelData.filter((fuel) => fuel[fuelType] !== 0).map((fuel) => fuel[fuelType]);
+const FuelTypeSelectedStationItem = ({ station, selectedDistrict, selectedCity, fuel }) => {
+	const { theme } = useTheme();
+	const themedStyles = styles(theme);
 
-	return {
-		minimum: Math.min(...prices),
-		maximum: Math.max(...prices),
-		minimumStation: fuelData.find((fuel) => fuel[fuelType] === Math.min(...prices)),
-		maximumStation: fuelData.find((fuel) => fuel[fuelType] === Math.max(...prices)),
-	};
+	return (
+		<View style={themedStyles.stationsContainer}>
+			<View style={themedStyles.stationsBackground}>
+				<View style={{ flex: 1 }}>
+					<Image
+						source={{ uri: PUBLIC_URL + station.displayName.toLocaleLowerCase("tr-TR") + ".png" }}
+						style={themedStyles.stationsImage}
+					/>
+				</View>
+				<View style={themedStyles.stationsTextContainer}>
+					{selectedDistrict.toLocaleUpperCase("tr-TR") === selectedCity.toLocaleUpperCase("tr-TR") && (
+						<BasicText bold style={themedStyles.descriptionTitle}>
+							{fuel.districtName}
+						</BasicText>
+					)}
+					<BasicText bold style={themedStyles.stationsText}>
+						{station.displayName}
+					</BasicText>
+					<BasicText style={themedStyles.stationsText}>{fuel.price.toFixed(3)} ₺</BasicText>
+				</View>
+			</View>
+		</View>
+	);
+};
+
+const filterFuelData = (fuelData, fuelType, selectedCity, selectedDistrict) => {
+	const filteredFuelData = fuelData[fuelType.id].filter((fuel) =>
+		selectedCity.toLocaleUpperCase("tr-TR") === selectedDistrict.toLocaleUpperCase("tr-TR")
+			? true
+			: fuel.districtName === selectedDistrict.toLocaleUpperCase("tr-TR"),
+	);
+	return filteredFuelData;
+};
+
+const getStationName = (stations, station) => {
+	const foundStation = stations?.find(({ id }) => id === station?.stationId);
+	return foundStation?.displayName ?? "İstasyon";
 };
 
 export default FuelTypeDisplayArea;
