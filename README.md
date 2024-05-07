@@ -4,7 +4,7 @@
 
 Akaryakıt Fiyatları, React Native Expo ile yazılmış bir mobil uygulamadır. Bu proje, kullanıcıya şehirlerindeki en ucuz akaryakıt fiyatlarını listelemeyi amaçlamaktadır.
 
-
+https://github.com/axelnt/AkaryakitFiyatlari/assets/51787476/457e4c7f-5f18-4645-8655-5b884b32e0b1
 
 ## Kurulum
 
