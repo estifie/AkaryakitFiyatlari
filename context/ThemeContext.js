@@ -30,7 +30,8 @@ const darkTheme = {
 const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
-	const isDarkMode = useColorScheme() === "dark";
+	//const isDarkMode = useColorScheme() === "dark";
+	const isDarkMode = true;
 	const [theme, setTheme] = useState(isDarkMode ? darkTheme : lightTheme);
 
 	const toggleTheme = () => {
