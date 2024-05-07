@@ -1,2 +1,35 @@
-# Akaryakit-Fiyatlari-React-Native-Expo
- A mobile application written with React Native Expo
+# Akaryakıt Fiyatları
+
+## Açıklama
+
+Akaryakıt Fiyatları, React Native Expo ile yazılmış bir mobil uygulamadır. Bu proje, kullanıcıya şehirlerindeki en ucuz akaryakıt fiyatlarını listelemeyi amaçlamaktadır.
+
+
+
+## Kurulum
+
+### Docker ile Kurulum
+
+1. Projeyi kopyalayın.
+
+```bash
+git clone https://github.com/axelnt/Akaryakit-Fiyatlari.git
+```
+
+2. Proje dosyasına gidin.
+
+```bash
+cd Akaryakit-Fiyatlari
+```
+
+3. Backend bağlantılarını sağlayın.
+
+3.1. constants klasörü içerisindeki `apiConfig.js` dosyasını açın.
+
+3.2. `BASE_URL` değerini ipv4 adresinize göre değiştirin. (unutmayın, localhost mobil cihazlarda kullanılamaz.)
+
+4. Projeyi başlatın.
+
+```bash
+npm run start
+```
