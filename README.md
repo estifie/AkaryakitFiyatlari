@@ -13,7 +13,7 @@ https://github.com/axelnt/AkaryakitFiyatlari/assets/51787476/457e4c7f-5f18-4645-
 1. Projeyi kopyalayın.
 
 ```bash
-git clone https://github.com/axelnt/Akaryakit-Fiyatlari.git
+git clone https://github.com/axelnt/AkaryakitFiyatlari.git
 ```
 
 2. Proje dosyasına gidin.
